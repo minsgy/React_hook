@@ -1,39 +1,49 @@
 import React, {useState} from 'react';
 
-// 2. useInput
-const useInput = (init, validator) =>{
-  const [value, setValue] = useState(init);
+
+const content = [
+  {
+    tab:"Section 1",
+    content : "I'm the content of the section 1"
+  },
+  {
+    tab:"Section 2",
+    content : "I'm the content of the section 2"
+  }
+]
+
+
+
+const useTabs = (initialTab, allTabs) => {
+  const [currentIndex, setCurrentIndex] = useState(initialTab);
   
-  const onChange = (e) =>{
-    const { target : {value} }= e;
-    let willUpdate = true;
-
-    if(typeof validator==="function"){
-      willUpdate = validator(value);
-    }
-
-    if (willUpdate) {
-      setValue(value);
-    }
-  } 
-
-  return { value, onChange };
+  if(!allTabs || !Array.isArray(allTabs)){
+    return;
+  }
+  
+  return {
+    currentItem: allTabs[currentIndex],
+    changeItem: setCurrentIndex
+  };
 };
 
 
 const App = () => {
-  // 2. useInput
 
-  const maxLen = (value) => value.length <= 10;
-  const name = useInput("Mr", maxLen);
+  const {currentItem, changeItem} = useTabs(1, content);
+
   return (
     <div>
-        {/* 2. useInput */}
-        <h1> ㅎㅇㅇ</h1>
-        {/* {...name} name에 들어간 함수의 모든 값을 unpack (Return) */}
-        <input placeholder="Name" {...name} />
+      {
+        content.map((section, index) => (
+          <>
+            <button onClick={()=>changeItem(index)}>{section.tab}</button>
+          </>
+        )
+      )}
+      {currentItem.content}
     </div>
   );
-};
+}
 
 export default App;
