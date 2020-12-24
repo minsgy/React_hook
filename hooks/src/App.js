@@ -1,33 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const useBeforeLeave = (onBefore) => {
-  if (typeof onBefore !== "function") {
-    console.log("값이 이상함");
+const useNetwork = (onChange) => {
+  // 온라인인지 확인
+  const [status, setStatus] = useState(navigator.onLine);
+
+  const handleChange = () => {
+    if (typeof onChange === "function") {
+      onChange(navigator.onLine);
+    }
+    setStatus(navigator.onLine);
   }
 
-  const handle = (e) => {
-    const { clientY } = e;
-    if (clientY <= 0) {
-      onBefore();
-    }
-  }
 
   useEffect(() => {
-    document.addEventListener("mouseleave", handle);
+    window.addEventListener("online", handleChange);
+    window.addEventListener("offline", handleChange);
     return () => {
-      document.removeEventListener("mouseleave", handle)
-    };
+      window.removeEventListener("online", handleChange);
+      window.removeEventListener("offline", handleChange);
+    }
   });
+
+  return status;
 }
 
 const App = () => {
-  const begForLife = () => {
-    console.log("PLS dont leave")
-  }
-  useBeforeLeave(begForLife);
+  const online = useNetwork();
   return (
     <div>
-      <h1>ㅎㅇㄹ</h1>
+      <h1>{online ? "Online" : "Offline"}</h1>
     </div>
   );
 
