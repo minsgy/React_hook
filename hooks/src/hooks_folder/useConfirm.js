@@ -1,26 +1,26 @@
 
-const useConfirm = (message = "", onCorfirm, onCancel) =>{
-    if(onCorfirm && typeof onCorfirm!=="function") {
-      return;
+const useConfirm = (message = "", onCorfirm, onCancel) => {
+  if (onCorfirm && typeof onCorfirm !== "function") {
+    return;
+  }
+  if (onCancel && typeof onCancel !== "function") {
+    return;
+  }
+
+  const confirmAction = () => {
+    if (window.confirm(message)) {
+      onCorfirm();
     }
-    if(onCancel && typeof onCancel!=="function" ){
-      return;
+    else {
+      onCancel();
     }
-  
-    const confirmAction = () => {
-      if(window.confirm(message)){
-        onCorfirm();
-      }
-      else{
-        onCancel();
-      }
-    }
-    return confirmAction;
-  };
-  
-  
+  }
+  return confirmAction;
+};
+
+
 //   const App = () => {
-  
+
 //   const delete_word = () => console.log("delete");
 //   const abort = () => console.log("aborted")
 //   const confirmDelete = useConfirm("동의함 ㅠ", delete_word, abort);

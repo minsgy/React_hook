@@ -1,35 +1,27 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const useConfirm = (message = "", onCorfirm, onCancel) =>{
-  if(onCorfirm && typeof onCorfirm!=="function") {
-    return;
+const usePreventLeave = () => {
+  const listener = (e) => {
+    e.preventDefault();
+    // 기본 값이 무조건 필요로함.
+    e.returnValue = "";
   }
-  if(onCancel && typeof onCancel!=="function" ){
-    return;
-  }
+  // beforeunload 창이 닫히기전 함수를 실행 할 수 있게함.
+  const enablePrevent = () => window.addEventListener("beforeunload", listener)
+  const disablePrevent = () => window.addEventListener("beforeunload", listener)
 
-  const confirmAction = () => {
-    if(window.confirm(message)){
-      onCorfirm();
-    }
-    else{
-      onCancel();
-    }
-  }
-  return confirmAction;
-};
-
+  return { enablePrevent, disablePrevent }
+}
 
 const App = () => {
+  const { enablePrevent, disablePrevent } = usePreventLeave();
+  return (
+    <div>
+      <button onClick={enablePrevent}>Protect</button>
+      <button onClick={disablePrevent}>unProtect</button>
+    </div>
+  );
 
-const delete_word = () => console.log("delete");
-const abort = () => console.log("aborted")
-const confirmDelete = useConfirm("동의함 ㅠ", delete_word, abort);
- return(
-   <div>
-     <button onClick={confirmDelete}>Delete</button>
-   </div>
- )
 }
 
 export default App;
