@@ -1,26 +1,37 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
+const useClick = onClick => {
+  const element = useRef();
 
-// 페이지 상태 title 변경
-const useTitle = (init) => {
-  const [title, setTitle] = useState(init);
-  const updateTitle = () => {
-    const htmlTitle = document.querySelector("title")
-    htmlTitle.innerText = title;
-  }
+  // if(typeof onClick !== "function"){
+  //   return;
+  // }
+
   useEffect(() => {
-    updateTitle()
-  }, [title]);
-  return setTitle;
+    if(element.current){
+      element.current.addEventListener("click", onClick)
+    }
+    // willUnmount
+    return () => {
+      if(element.current){
+       element.current.removeEventListener("click", onClick)
+      }
+    };
+  },[]);
+
+  return element;
 }
 
+
 const App = () => {
-  const titleUpdator = useTitle("Loading . . .");
-  setTimeout(() => titleUpdator("home"), 5000)
+  const sayHello = () => console.log("say hello");
+  const title = useClick(sayHello);
   return (
+
     <div>
-      <div>ㅎㅇㄹ</div>
+      <h1 ref={title}>ㅎㅇㄹ</h1>
     </div>
+
   )
 }
 
