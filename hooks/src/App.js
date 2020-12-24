@@ -1,35 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const useScroll = () => {
-  const [state, setState] = useState({
-    x: 0,
-    y: 0
-  });
+const useNotification = (title, options) => {
 
-  const onscroll = (e) => {
-    setState({ y: window.scrollY, x: window.scrollX });
-  }
+  const fireNotif = () => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification(title, options);
+        }
+        else {
+          return;
+        }
+      })
+    } else {
+      new Notification(title, options);
+    }
+  };
+  return fireNotif;
 
-  useEffect(() => {
-    window.addEventListener("scroll", onscroll);
-    return () => window.removeEventListener("scroll", onscroll);
-  }, [])
-
-
-
-  return state;
 }
 
 const App = () => {
-
-  const { y } = useScroll();
-
+  const triggerNotif = useNotification("아 내일 머먹지", {
+    body: "김치추천"
+  });
   return (
-    <div style={{ height: "1000vh" }}>
-      <h1 style={{ position: "fixed", color: y > 100 ? "red" : "blue" }}>ㅎㅇㄹ</h1>
+    <div>
+      <button onClick={triggerNotif}>밥버튼</button>
     </div>
   );
-
 }
 
 export default App;
