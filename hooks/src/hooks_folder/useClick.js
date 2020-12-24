@@ -22,14 +22,14 @@ export const useClick = onClick => {
   }
   
   
-  const App = () => {
-    const sayHello = () => console.log("say hello");
-    const title = useClick(sayHello);
-    return (
+//   const App = () => {
+//     const sayHello = () => console.log("say hello");
+//     const title = useClick(sayHello);
+//     return (
   
-      <div>
-        <h1 ref={title}>ㅎㅇㄹ</h1>
-      </div>
+//       <div>
+//         <h1 ref={title}>ㅎㅇㄹ</h1>
+//       </div>
   
-    )
-  }
+//     )
+//   }

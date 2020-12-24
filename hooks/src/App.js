@@ -1,38 +1,35 @@
 import React, {useState, useEffect, useRef} from 'react';
 
-const useClick = onClick => {
-  const element = useRef();
+const useConfirm = (message = "", onCorfirm, onCancel) =>{
+  if(onCorfirm && typeof onCorfirm!=="function") {
+    return;
+  }
+  if(onCancel && typeof onCancel!=="function" ){
+    return;
+  }
 
-  // if(typeof onClick !== "function"){
-  //   return;
-  // }
-
-  useEffect(() => {
-    if(element.current){
-      element.current.addEventListener("click", onClick)
+  const confirmAction = () => {
+    if(window.confirm(message)){
+      onCorfirm();
     }
-    // willUnmount
-    return () => {
-      if(element.current){
-       element.current.removeEventListener("click", onClick)
-      }
-    };
-  },[]);
-
-  return element;
-}
+    else{
+      onCancel();
+    }
+  }
+  return confirmAction;
+};
 
 
 const App = () => {
-  const sayHello = () => console.log("say hello");
-  const title = useClick(sayHello);
-  return (
 
-    <div>
-      <h1 ref={title}>ㅎㅇㄹ</h1>
-    </div>
-
-  )
+const delete_word = () => console.log("delete");
+const abort = () => console.log("aborted")
+const confirmDelete = useConfirm("동의함 ㅠ", delete_word, abort);
+ return(
+   <div>
+     <button onClick={confirmDelete}>Delete</button>
+   </div>
+ )
 }
 
 export default App;
