@@ -1,26 +1,27 @@
 import React, {useState, useEffect} from 'react';
 
 
-
+// 페이지 상태 title 변경
+const useTitle = (init) => {
+  const [title, setTitle] = useState(init);
+  const updateTitle = () => {
+    const htmlTitle = document.querySelector("title")
+    htmlTitle.innerText = title;
+  }
+  useEffect(() => {
+    updateTitle()
+  }, [title]);
+  return setTitle;
+}
 
 const App = () => {
-
-  const sayHello = () => console.log("hello");
-
-  const [number, setNumber] = useState(0);
-  const [anumber, setAnumber] = useState(0);
-  
-  useEffect(() => {
-    sayHello();
-  }, [number]);
-
+  const titleUpdator = useTitle("Loading . . .");
+  setTimeout(() => titleUpdator("home"), 5000)
   return (
     <div>
-      <div>HI</div>
-      <button onClick= {() => setNumber(number+1)}>{number}</button>
-      <button onClick= {() => setAnumber(anumber+1)}>{anumber}</button>
+      <div>ㅎㅇㄹ</div>
     </div>
-  );
+  )
 }
 
 export default App;
