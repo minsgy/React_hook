@@ -1,47 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 
-const content = [
-  {
-    tab:"Section 1",
-    content : "I'm the content of the section 1"
-  },
-  {
-    tab:"Section 2",
-    content : "I'm the content of the section 2"
-  }
-]
-
-
-
-const useTabs = (initialTab, allTabs) => {
-  const [currentIndex, setCurrentIndex] = useState(initialTab);
-  
-  if(!allTabs || !Array.isArray(allTabs)){
-    return;
-  }
-  
-  return {
-    currentItem: allTabs[currentIndex],
-    changeItem: setCurrentIndex
-  };
-};
 
 
 const App = () => {
 
-  const {currentItem, changeItem} = useTabs(1, content);
+  const sayHello = () => console.log("hello");
+
+  const [number, setNumber] = useState(0);
+  const [anumber, setAnumber] = useState(0);
+  
+  useEffect(() => {
+    sayHello();
+  }, [number]);
 
   return (
     <div>
-      {
-        content.map((section, index) => (
-          <>
-            <button onClick={()=>changeItem(index)}>{section.tab}</button>
-          </>
-        )
-      )}
-      {currentItem.content}
+      <div>HI</div>
+      <button onClick= {() => setNumber(number+1)}>{number}</button>
+      <button onClick= {() => setAnumber(anumber+1)}>{anumber}</button>
     </div>
   );
 }
