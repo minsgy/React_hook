@@ -1,24 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const usePreventLeave = () => {
-  const listener = (e) => {
-    e.preventDefault();
-    // 기본 값이 무조건 필요로함.
-    e.returnValue = "";
+const useBeforeLeave = (onBefore) => {
+  if (typeof onBefore !== "function") {
+    console.log("값이 이상함");
   }
-  // beforeunload 창이 닫히기전 함수를 실행 할 수 있게함.
-  const enablePrevent = () => window.addEventListener("beforeunload", listener)
-  const disablePrevent = () => window.addEventListener("beforeunload", listener)
 
-  return { enablePrevent, disablePrevent }
+  const handle = (e) => {
+    const { clientY } = e;
+    if (clientY <= 0) {
+      onBefore();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("mouseleave", handle);
+    return () => {
+      document.removeEventListener("mouseleave", handle)
+    };
+  });
 }
 
 const App = () => {
-  const { enablePrevent, disablePrevent } = usePreventLeave();
+  const begForLife = () => {
+    console.log("PLS dont leave")
+  }
+  useBeforeLeave(begForLife);
   return (
     <div>
-      <button onClick={enablePrevent}>Protect</button>
-      <button onClick={disablePrevent}>unProtect</button>
+      <h1>ㅎㅇㄹ</h1>
     </div>
   );
 
