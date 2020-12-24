@@ -1,34 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const useNetwork = (onChange) => {
-  // 온라인인지 확인
-  const [status, setStatus] = useState(navigator.onLine);
-
-  const handleChange = () => {
-    if (typeof onChange === "function") {
-      onChange(navigator.onLine);
-    }
-    setStatus(navigator.onLine);
-  }
-
-
-  useEffect(() => {
-    window.addEventListener("online", handleChange);
-    window.addEventListener("offline", handleChange);
-    return () => {
-      window.removeEventListener("online", handleChange);
-      window.removeEventListener("offline", handleChange);
-    }
+const useScroll = () => {
+  const [state, setState] = useState({
+    x: 0,
+    y: 0
   });
 
-  return status;
+  const onscroll = (e) => {
+    setState({ y: window.scrollY, x: window.scrollX });
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", onscroll);
+    return () => window.removeEventListener("scroll", onscroll);
+  }, [])
+
+
+
+  return state;
 }
 
 const App = () => {
-  const online = useNetwork();
+
+  const { y } = useScroll();
+
   return (
-    <div>
-      <h1>{online ? "Online" : "Offline"}</h1>
+    <div style={{ height: "1000vh" }}>
+      <h1 style={{ position: "fixed", color: y > 100 ? "red" : "blue" }}>ㅎㅇㄹ</h1>
     </div>
   );
 
